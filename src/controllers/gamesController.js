@@ -5,12 +5,14 @@ export async function getGames(req, res) {
     const { name } = req.query;
     if (name) {
       const games = await connection.query(
-        `SELECT * FROM games WHERE LOWER(name) LIKE LOWER($1) || '%';`,
+        `SELECT games.id, games.name, games.image, games."stockTotal", games."categoryId", games."pricePerDay", categories.name AS "categoryName" FROM games JOIN categories ON games."categoryId" = categories.id WHERE LOWER(games.name) LIKE LOWER($1) || '%';`,
         [name]
       );
-      res.send(games.rows);
+      return res.send(games.rows);
     }
-    const games = await connection.query("SELECT * FROM games;");
+    const games = await connection.query(
+      `SELECT games.id, games.name, games.image, games."stockTotal", games."categoryId", games."pricePerDay", categories.name AS "categoryName" FROM games JOIN categories ON games."categoryId" = categories.id;`
+    );
     res.send(games.rows);
   } catch (error) {
     console.log(error);
