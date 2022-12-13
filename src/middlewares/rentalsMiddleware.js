@@ -74,11 +74,14 @@ export async function isRental(req, res, next) {
 export async function isReturned(req, res, next) {
   const method = req.method;
   if (method === "DELETE") {
-    if (!res.locals.rental.rows[0].returnDate) {
+    if (res.locals.rental.rows[0].returnDate) {
       return res.sendStatus(400);
     }
-  } else if (res.locals.rental.rows[0].returnDate) {
-    return res.sendStatus(400);
+  } else {
+    console.log("oi 2");
+    if (res.locals.rental.rows[0].returnDate) {
+      return res.sendStatus(400);
+    }
   }
   next();
 }
