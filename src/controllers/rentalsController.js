@@ -29,6 +29,9 @@ export async function getRentals(req, res) {
 export async function addRental(req, res) {
   try {
     const { customerId, gameId, daysRented } = req.body;
+    if (daysRented <= 0) {
+        return res.sendStatus(400)
+    }
     await connection.query(
       `INSERT INTO rentals ("customerId", "gameId", "rentDate", "daysRented", "returnDate", "originalPrice", "delayFee") VALUES ($1, $2, (SELECT CURRENT_DATE), $3, null, (SELECT "pricePerDay" FROM games where id=$2)*$3, null);`,
       [customerId, gameId, daysRented]
