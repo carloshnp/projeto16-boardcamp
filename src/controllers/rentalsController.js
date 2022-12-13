@@ -39,3 +39,18 @@ export async function addRental(req, res) {
     res.sendStatus(500);
   }
 }
+
+export async function finishRental(req, res) {
+  try {
+    const { id } = req.params;
+    await connection.query(
+      `UPDATE rentals SET "returnDate"=CURRENT_DATE, "delayFee"=((SELECT "rentDate" - CURRENT_DATE FROM rentals WHERE id=$1)*(SELECT "originalPrice" FROM games WHERE id=(SELECT "gameId" FROM rentals WHERE id=$1))) WHERE id=$1;`,
+      [id]
+    );
+    res.sendStatus(200);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+}
+
