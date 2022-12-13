@@ -1,3 +1,4 @@
+import { restart } from "nodemon";
 import { connection } from "../database/db.js";
 
 export async function getCustomers(req, res) {
@@ -10,7 +11,7 @@ export async function getCustomers(req, res) {
       );
       return res.send(query.rows);
     }
-    const query = await connection.query('SELECT * FROM customers;')
+    const query = await connection.query("SELECT * FROM customers;");
     res.send(query.rows);
   } catch (error) {
     console.log(error);
@@ -19,7 +20,20 @@ export async function getCustomers(req, res) {
 }
 
 export async function getCustomersById(req, res) {
-  return;
+  try {
+    const { id } = req.params;
+    if (!id) {
+      return res.sendStatus(404);
+    }
+    const query = await connection.query(
+      `SELECT * FROM customers WHERE id=$1;`,
+      [id]
+    );
+    res.send(query.rows);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
 }
 
 export async function addCustomer(req, res) {
