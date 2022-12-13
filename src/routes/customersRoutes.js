@@ -9,7 +9,7 @@ import {
 const router = Router();
 
 router.get("/customers", getCustomers);
-router.get("/customers", getCustomersById);
+router.get("/customers/:id", getCustomersById);
 router.post("/customers", addCustomer);
 router.put("/customer", updateCustomer);
 

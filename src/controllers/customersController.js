@@ -21,13 +21,13 @@ export async function getCustomers(req, res) {
 export async function getCustomersById(req, res) {
   try {
     const { id } = req.params;
-    if (!id) {
-      return res.sendStatus(404);
-    }
     const query = await connection.query(
       `SELECT * FROM customers WHERE id=$1;`,
       [id]
     );
+    if (query.rows.length === 0) {
+      return res.sendStatus(404);
+    }
     res.send(query.rows);
   } catch (error) {
     console.log(error);
