@@ -1,0 +1,16 @@
+import { Router } from "express";
+import {
+  addCustomer,
+  getCustomers,
+  getCustomersById,
+  updateCustomer,
+} from "../controllers/customersController.js";
+
+const router = Router();
+
+router.get("/customers", getCustomers);
+router.get("/customers", getCustomersById);
+router.post("/customers", addCustomer);
+router.put("/customer", updateCustomer);
+
+export default router;
