@@ -1,4 +1,3 @@
-import { restart } from "nodemon";
 import { connection } from "../database/db.js";
 
 export async function getCustomers(req, res) {
@@ -37,7 +36,17 @@ export async function getCustomersById(req, res) {
 }
 
 export async function addCustomer(req, res) {
-  return;
+  try {
+    const { name, phone, cpf, birthday } = req.body;
+    await connection.query(
+      "INSERT INTO customers (name, phone, cpf, birthday) VALUES ($1, $2, $3, $4);",
+      [name, phone, cpf, birthday]
+    );
+    res.sendStatus(201);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
 }
 
 export async function updateCustomer(req, res) {
